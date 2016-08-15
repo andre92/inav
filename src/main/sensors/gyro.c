@@ -160,25 +160,24 @@ static bool gyroDetect(gyroDev_t *dev)
 #ifdef GYRO_MPU6500_ALIGN
                 dev->gyroAlign = GYRO_MPU6500_ALIGN;
 #endif
-
                 break;
             }
 #endif
             ; // fallthrough
 
-    case GYRO_MPU9250:
+        case GYRO_MPU9250:
 #ifdef USE_GYRO_SPI_MPU9250
-        if (mpu9250SpiGyroDetect(dev))
-        {
-            gyroHardware = GYRO_MPU9250;
+            if (mpu9250SpiGyroDetect(dev))
+            {
+                gyroHardware = GYRO_MPU9250;
 #ifdef GYRO_MPU9250_ALIGN
-            dev->gyroAlign = GYRO_MPU9250_ALIGN;
+                dev->gyroAlign = GYRO_MPU9250_ALIGN;
 #endif
+                break;
+            }
+#endif
+            ; // fallthrough
 
-            break;
-        }
-#endif
-        ; // fallthrough
         case GYRO_FAKE:
 #ifdef USE_FAKE_GYRO
             if (fakeGyroDetect(dev)) {

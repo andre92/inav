@@ -132,6 +132,16 @@ mpuDetectionResult_t *mpuDetect(const extiConfig_t *configToUse)
 #ifdef USE_SPI
 static bool detectSPISensorsAndUpdateDetectionResult(void)
 {
+#ifdef USE_GYRO_SPI_ICM20608
+    if (icm20608SpiDetect()) {
+        mpuDetectionResult.sensor = ICM_20608_SPI;
+        mpuConfiguration.gyroReadXRegister = MPU_RA_GYRO_XOUT_H;
+        mpuConfiguration.read = icm20608ReadRegister;
+        mpuConfiguration.write = icm20608WriteRegister;
+        return true;
+    }
+#endif
+
 #ifdef USE_GYRO_SPI_MPU6500
     if (mpu6500SpiDetect()) {
         mpuDetectionResult.sensor = MPU_65xx_SPI;

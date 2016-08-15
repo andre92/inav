@@ -74,6 +74,8 @@
         #define FLASH_PAGE_SIZE                 ((uint32_t)0x20000) // 128K sectors
     #elif defined(STM32F411xE)
         #define FLASH_PAGE_SIZE                 ((uint32_t)0x20000) // 128K sectors
+    #elif defined(STM32F427_437xx)
+        #define FLASH_PAGE_SIZE                 ((uint32_t)0x20000) // 128K sectors
     #else
         #error "Flash page size not defined for target."
     #endif
@@ -118,7 +120,7 @@ bool isEEPROMContentValid(void)
     return true;
 }
 
-#if defined(STM32F40_41xxx) || defined(STM32F411xE)
+#if defined(STM32F40_41xxx) || defined(STM32F411xE) || defined(STM32F427_437xx)
 /*
 Sector 0    0x08000000 - 0x08003FFF 16 Kbytes
 Sector 1    0x08004000 - 0x08007FFF 16 Kbytes
@@ -190,7 +192,7 @@ void writeEEPROM(void)
     // write it
     FLASH_Unlock();
     while (attemptsRemaining--) {
-#ifdef STM32F40_41xxx
+#ifdef STM32F4
         FLASH_ClearFlag(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
 #endif
 #ifdef STM32F303
@@ -201,7 +203,7 @@ void writeEEPROM(void)
 #endif
         for (wordOffset = 0; wordOffset < sizeof(master_t); wordOffset += 4) {
             if (wordOffset % FLASH_PAGE_SIZE == 0) {
-#if defined(STM32F40_41xxx) || defined(STM32F411xE)
+#if defined(STM32F40_41xxx) || defined(STM32F411xE) || defined(STM32F427_437xx)
                 status = FLASH_EraseSector(getFLASHSectorForEEPROM(), VoltageRange_3); //0x08080000 to 0x080A0000
 #else
                 status = FLASH_ErasePage((uint32_t)&__config_start + wordOffset);

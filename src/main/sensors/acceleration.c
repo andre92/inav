@@ -177,6 +177,7 @@ retry:
                 break;
             }
 #endif
+            ; // fallthrough
         case ACC_MPU9250:
 #ifdef USE_ACC_SPI_MPU9250
             if (mpu9250SpiAccDetect(dev)) {
