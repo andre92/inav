@@ -876,6 +876,8 @@ const clivalue_t valueTable[] = {
     { "max_angle_inclination_pit",  VAR_INT16  | PROFILE_VALUE,  &masterConfig.profile[0].pidProfile.max_angle_inclination[FD_PITCH], .config.minmax = { 100,  900 }, 0 },
 
     { "gyro_soft_lpf_hz",           VAR_UINT8  | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.gyro_soft_lpf_hz, .config.minmax = {0, 200 } },
+    { "gyro_notch_hz",         		VAR_UINT16 | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.gyro_soft_notch_hz, .config.minmax = {0, 500 } },
+    { "gyro_notch_cutoff_hz",  		VAR_UINT16 | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.gyro_soft_notch_cutoff_hz, .config.minmax = {1, 500 } },
     { "acc_soft_lpf_hz",            VAR_UINT8  | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.acc_soft_lpf_hz, .config.minmax = {0, 200 } },
     { "dterm_lpf_hz",               VAR_UINT8  | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.dterm_lpf_hz, .config.minmax = {0, 200 } },
     { "yaw_lpf_hz",                 VAR_UINT8  | PROFILE_VALUE, &masterConfig.profile[0].pidProfile.yaw_lpf_hz, .config.minmax = {0, 200 } },
