@@ -45,12 +45,21 @@ static const gyroConfig_t *gyroConfig;
 static uint16_t calibratingG = 0;
 
 static biquadFilter_t gyroFilterLPF[XYZ_AXIS_COUNT];
+static biquadFilter_t gyroFilterNotch[XYZ_AXIS_COUNT];
 static uint8_t gyroSoftLpfHz = 0;
+static uint16_t gyroSoftNotchHz = 0;
+static uint16_t gyroSoftNotchCutoffHz = 0;
 
 void gyroUseConfig(const gyroConfig_t *gyroConfigToUse, uint8_t gyro_soft_lpf_hz)
 {
     gyroConfig = gyroConfigToUse;
-    gyroSoftLpfHz = gyro_soft_lpf_hz;
+    gyroSoftLpfHz = gyro_soft_lpf_hz;	
+}
+
+void gyroUseNotchConfig(uint16_t gyro_soft_notch_hz, uint16_t gyro_soft_notch_cutoff_hz)
+{
+    gyroSoftNotchHz = gyro_soft_notch_hz;
+	gyroSoftNotchCutoffHz = gyro_soft_notch_cutoff_hz;	
 }
 
 void gyroInit(void)
@@ -68,6 +77,15 @@ void gyroInit(void)
         #endif
         }
     }
+	if (gyroSoftNotchHz) {
+		for (int axis = 0; axis < 3; axis++) {
+        #ifdef ASYNC_GYRO_PROCESSING
+            biquadFilterInitNotch(&gyroFilterNotch[axis], getGyroUpdateRate(), gyroSoftNotchHz, gyroSoftNotchCutoffHz);
+        #else
+            biquadFilterInitNotch(&gyroFilterNotch[axis], gyro.targetLooptime, gyroSoftNotchHz, gyroSoftNotchCutoffHz);
+        #endif
+        }
+	}
 }
 
 void gyroSetCalibrationCycles(uint16_t calibrationCyclesRequired)
