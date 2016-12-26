@@ -136,6 +136,8 @@ void resetPidProfile(pidProfile_t *pidProfile)
 
     pidProfile->acc_soft_lpf_hz = 15;
     pidProfile->gyro_soft_lpf_hz = 60;
+	pidProfile->gyro_soft_notch_cutoff_hz = 130;
+	pidProfile->gyro_soft_notch_hz = 260;
     pidProfile->dterm_lpf_hz = 40;
     pidProfile->yaw_lpf_hz = 30;
 
@@ -778,8 +780,9 @@ void activateConfig(void)
     );
 
     gyroUseConfig(&masterConfig.gyroConfig, currentProfile->pidProfile.gyro_soft_lpf_hz);
+	gyroUseNotchConfig(currentProfile->pidProfile.gyro_soft_notch_hz, currentProfile->pidProfile.gyro_soft_notch_cutoff_hz)
 
-#ifdef TELEMETRY
+	#ifdef TELEMETRY
     telemetryUseConfig(&masterConfig.telemetryConfig);
 #endif
 
