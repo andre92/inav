@@ -223,6 +223,7 @@ bool gyroInit(const gyroConfig_t *gyroConfigToUse)
         }
     }
 
+    #ifdef USE_GYRO_NOTCH_FILTER
     if (gyroConfig->gyro_soft_notch_hz) {
         for (int axis = 0; axis < 3; axis++) {
         #ifdef ASYNC_GYRO_PROCESSING
@@ -232,6 +233,7 @@ bool gyroInit(const gyroConfig_t *gyroConfigToUse)
         #endif
         }
     }
+    #endif
 
     return true;
 
@@ -313,11 +315,14 @@ void gyroUpdate(void)
             gyro.gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterLPF[axis], (float)gyro.gyroADC[axis]));
         }
     }
+
+    #ifdef USE_GYRO_NOTCH_FILTER
     if (gyroConfig->gyro_soft_notch_hz){
         for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++){
             gyro.gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterNotch[axis], (float) gyro.gyroADC[axis]));
         }	
     }
+    #endif
 	
     if (!isGyroCalibrationComplete()) {
         performAcclerationCalibration(gyroConfig->gyroMovementCalibrationThreshold);
