@@ -67,9 +67,9 @@ static const gyroConfig_t *gyroConfig;
 static uint16_t calibratingG = 0;
 
 static biquadFilter_t gyroFilterLPF[XYZ_AXIS_COUNT];
-
+#ifdef USE_GYRO_NOTCH_FILTER
 static biquadFilter_t gyroFilterNotch[XYZ_AXIS_COUNT];
-
+#endif
 static const extiConfig_t *selectMPUIntExtiConfig(void)
 {
 #if defined(MPU_INT_EXTI)
