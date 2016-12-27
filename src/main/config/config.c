@@ -137,8 +137,10 @@ void resetPidProfile(pidProfile_t *pidProfile)
 
     pidProfile->acc_soft_lpf_hz = 15;
     pidProfile->gyro_soft_lpf_hz = 60;
+#ifdef USE_GYRO_NOTCH_FILTER
     pidProfile->gyro_soft_notch_cutoff_hz = 42;
     pidProfile->gyro_soft_notch_hz = 84;
+#endif
     pidProfile->dterm_lpf_hz = 40;
     pidProfile->yaw_lpf_hz = 30;
 
