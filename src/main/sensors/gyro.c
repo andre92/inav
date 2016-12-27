@@ -77,15 +77,15 @@ void gyroInit(void)
         #endif
         }
     }
-	if (gyroSoftNotchHz) {
-		for (int axis = 0; axis < 3; axis++) {
+    if (gyroSoftNotchHz) {
+        for (int axis = 0; axis < 3; axis++) {
         #ifdef ASYNC_GYRO_PROCESSING
             biquadFilterInitNotch(&gyroFilterNotch[axis], getGyroUpdateRate(), gyroSoftNotchHz, gyroSoftNotchCutoffHz);
         #else
             biquadFilterInitNotch(&gyroFilterNotch[axis], gyro.targetLooptime, gyroSoftNotchHz, gyroSoftNotchCutoffHz);
         #endif
         }
-	}
+    }
 }
 
 void gyroSetCalibrationCycles(uint16_t calibrationCyclesRequired)
