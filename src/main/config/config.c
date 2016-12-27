@@ -790,8 +790,10 @@ void activateConfig(void)
     );
 
     gyroConfig()->gyro_soft_lpf_hz = currentProfile->pidProfile.gyro_soft_lpf_hz;
+#ifdef USE_GYRO_NOTCH_FILTER
     gyroConfig()->gyro_soft_notch_hz = currentProfile->pidProfile.gyro_soft_notch_hz;
     gyroConfig()->gyro_soft_notch_cutoff_hz = currentProfile->pidProfile.gyro_soft_notch_cutoff_hz;
+#endif
 
 #ifdef TELEMETRY
     telemetryUseConfig(&masterConfig.telemetryConfig);
