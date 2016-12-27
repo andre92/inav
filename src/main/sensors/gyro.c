@@ -173,7 +173,12 @@ void gyroUpdate(void)
             gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterLPF[axis], (float) gyroADC[axis]));
         }
     }
-
+    if (gyroSoftNotchHz){
+        for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++){
+            gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterNotch[axis], (float) gyroADC[axis]));
+        }	
+    }
+	
     if (!isGyroCalibrationComplete()) {
         performAcclerationCalibration(gyroConfig->gyroMovementCalibrationThreshold);
     }
