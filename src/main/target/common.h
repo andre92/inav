@@ -30,6 +30,7 @@
 #define USE_SERIALRX_IBUS       // Cheap FlySky & Turnigy receivers
 
 #if (FLASH_SIZE > 64)
+#define USE_GYRO_NOTCH_FILTER
 #define ASYNC_GYRO_PROCESSING
 #define BOOTLOG
 #define BLACKBOX
