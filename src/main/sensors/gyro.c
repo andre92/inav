@@ -59,7 +59,7 @@ void gyroUseConfig(const gyroConfig_t *gyroConfigToUse, uint8_t gyro_soft_lpf_hz
 void gyroUseNotchConfig(uint16_t gyro_soft_notch_hz, uint16_t gyro_soft_notch_cutoff_hz)
 {
     gyroSoftNotchHz = gyro_soft_notch_hz;
-	gyroSoftNotchCutoffHz = gyro_soft_notch_cutoff_hz;	
+    gyroSoftNotchCutoffHz = gyro_soft_notch_cutoff_hz;	
 }
 
 void gyroInit(void)
