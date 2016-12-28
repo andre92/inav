@@ -1057,8 +1057,8 @@ static bool mspFcProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst, mspPostProcessFn
         sbufWriteU8(dst, currentProfile->pidProfile.gyro_soft_lpf_hz);
         sbufWriteU16(dst, currentProfile->pidProfile.dterm_lpf_hz);
         sbufWriteU16(dst, currentProfile->pidProfile.yaw_lpf_hz);
-        sbufWriteU16(dst, 1); //masterConfig.gyro_soft_notch_hz_1
-        sbufWriteU16(dst, 1); //BF: masterConfig.gyro_soft_notch_cutoff_1
+        sbufWriteU16(dst, currentProfile->pidProfile.gyro_soft_notch_hz); //masterConfig.gyro_soft_notch_hz_1
+        sbufWriteU16(dst, currentProfile->pidProfile.gyro_soft_notch_cutoff_hz); //BF: masterConfig.gyro_soft_notch_cutoff_1
         sbufWriteU16(dst, 1); //BF: currentProfile->pidProfile.dterm_notch_hz
         sbufWriteU16(dst, 1); //currentProfile->pidProfile.dterm_notch_cutoff
         sbufWriteU16(dst, 1); //BF: masterConfig.gyro_soft_notch_hz_2
@@ -1451,7 +1451,8 @@ static mspResult_e mspFcProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
         currentProfile->pidProfile.gyro_soft_lpf_hz = sbufReadU8(src);
         currentProfile->pidProfile.dterm_lpf_hz = constrain(sbufReadU16(src), 0, 255);
         currentProfile->pidProfile.yaw_lpf_hz = constrain(sbufReadU16(src), 0, 255);
-
+        currentProfile->pidProfile.gyro_soft_notch_hz = constrain(sbufReadU16(src), 0, 500);
+        currentProfile->pidProfile.gyro_soft_notch_cutoff_hz = constrain(sbufReadU16(src), 1, 500);
         //BF: masterConfig.gyro_soft_notch_hz_1 = read16();
         //BF: masterConfig.gyro_soft_notch_cutoff_1 = read16();
         //BF: currentProfile->pidProfile.dterm_notch_hz = read16();
