@@ -1057,8 +1057,13 @@ static bool mspFcProcessOutCommand(uint8_t cmdMSP, sbuf_t *dst, mspPostProcessFn
         sbufWriteU8(dst, currentProfile->pidProfile.gyro_soft_lpf_hz);
         sbufWriteU16(dst, currentProfile->pidProfile.dterm_lpf_hz);
         sbufWriteU16(dst, currentProfile->pidProfile.yaw_lpf_hz);
+#ifdef USE_GYRO_NOTCH_FILTER
         sbufWriteU16(dst, currentProfile->pidProfile.gyro_soft_notch_hz); //masterConfig.gyro_soft_notch_hz_1
         sbufWriteU16(dst, currentProfile->pidProfile.gyro_soft_notch_cutoff_hz); //BF: masterConfig.gyro_soft_notch_cutoff_1
+#else
+        sbufWriteU16(dst, 1); //masterConfig.gyro_soft_notch_hz_1
+        sbufWriteU16(dst, 1); //BF: masterConfig.gyro_soft_notch_cutoff_1
+#endif
         sbufWriteU16(dst, 1); //BF: currentProfile->pidProfile.dterm_notch_hz
         sbufWriteU16(dst, 1); //currentProfile->pidProfile.dterm_notch_cutoff
         sbufWriteU16(dst, 1); //BF: masterConfig.gyro_soft_notch_hz_2
