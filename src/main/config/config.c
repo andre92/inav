@@ -143,6 +143,7 @@ void resetPidProfile(pidProfile_t *pidProfile)
 #endif
     pidProfile->dterm_lpf_hz = 40;
     pidProfile->yaw_lpf_hz = 30;
+    pidProfile->dterm_setpoint_weight = 0.0f;
 
     pidProfile->rollPitchItermIgnoreRate = 200;     // dps
     pidProfile->yawItermIgnoreRate = 50;            // dps
