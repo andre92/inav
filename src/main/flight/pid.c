@@ -340,8 +340,8 @@ static void pidApplyRateController(const pidProfile_t *pidProfile, pidState_t *p
         // optimisation for when D8 is zero, often used by YAW axis
         newDTerm = 0;
     } else {
-        firFilterUpdate(&pidState->gyroRateFilter, pidState->gyroRate);
-        newDTerm = firFilterApply(&pidState->gyroRateFilter) * (-pidState->kD / dT);
+        firFilterUpdate(&pidState->gyroRateFilter, pidProfile->dterm_setpoint_weight * pidState->rateTarget - pidState->gyroRate);
+        newDTerm = firFilterApply(&pidState->gyroRateFilter) * (pidState->kD / dT);
 
         // Apply additional lowpass
         if (pidProfile->dterm_lpf_hz) {
