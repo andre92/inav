@@ -75,7 +75,7 @@ typedef struct pidProfile_s {
     int16_t max_angle_inclination[ANGLE_INDEX_COUNT];       // Max possible inclination (roll and pitch axis separately
 
     uint8_t mag_hold_rate_limit;            //Maximum rotation rate MAG_HOLD mode can feed to yaw rate PID controller
-
+    float dterm_setpoint_weight;
 #ifdef USE_SERVOS
     uint16_t fixedWingItermThrowLimit;
 #endif
