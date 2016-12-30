@@ -79,7 +79,6 @@ typedef struct {
     // Dterm notch filtering
 #ifdef USE_DTERM_NOTCH
     biquadFilter_t deltaNotchFilter;
-    bool isNotchFilterInitialized;
 #endif
 } pidState_t;
 
@@ -109,10 +108,16 @@ void pidInit(void)
     static const float dtermCoeffs[PID_GYRO_RATE_BUF_LENGTH] = {5.0f/8, 2.0f/8, -8.0f/8, -2.0f/8, 3.0f/8};
     for (int axis = 0; axis < 3; ++ axis) {
         firFilterInit(&pidState[axis].gyroRateFilter, pidState[axis].gyroRateBuf, PID_GYRO_RATE_BUF_LENGTH, dtermCoeffs);
-#ifdef USE_DTERM_NOTCH
-    pidState[axis].isNotchFilterInitialized = false;
-#endif
     }
+}
+
+bool pidDeltaNotchInit(const pidProfile_t *pidProfile, uint32_t refreshRate)
+{
+	if(refreshRate){
+        biquadFilterInitNotch(&pidState->deltaNotchFilter, refreshRate, pidProfile->dterm_soft_notch_hz, pidProfile->dterm_soft_notch_cutoff);
+        return true;
+	}
+	return false;
 }
 
 void pidResetErrorAccumulators(void)
@@ -362,21 +367,7 @@ static void pidApplyRateController(const pidProfile_t *pidProfile, pidState_t *p
 
 #ifdef USE_DTERM_NOTCH
         if (pidProfile->dterm_soft_notch_hz) {
-            if(pidState->isNotchFilterInitialized){
-                newDTerm = biquadFilterApply(&pidState->deltaNotchFilter, newDTerm);
-            }
-            else{
-                uint32_t refreshRate = 0;
-                #ifdef ASYNC_GYRO_PROCESSING
-                    refreshRate = getPidUpdateRate();
-                #else
-                    refreshRate = gyro.targetLooptime;
-                #endif
-                if(refreshRate){
-                    biquadFilterInitNotch(&pidState->deltaNotchFilter, refreshRate, currentProfile->pidProfile.dterm_soft_notch_hz, currentProfile->pidProfile.dterm_soft_notch_cutoff);
-                    pidState->isNotchFilterInitialized = true;
-                }
-            }
+            newDTerm = biquadFilterApply(&pidState->deltaNotchFilter, newDTerm);
         }
 #endif
         
