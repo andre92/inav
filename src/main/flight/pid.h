@@ -93,6 +93,7 @@ extern int16_t axisPID[];
 extern int32_t axisPID_P[], axisPID_I[], axisPID_D[], axisPID_Setpoint[];
 
 void pidInit(void);
+bool pidDeltaNotchInit(const pidProfile_t *pidProfile, uint32_t refreshRate);
 void pidResetErrorAccumulators(void);
 
 struct controlRateConfig_s;
