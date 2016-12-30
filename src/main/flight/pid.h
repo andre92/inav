@@ -64,7 +64,8 @@ typedef struct pidProfile_s {
 #ifdef USE_DTERM_NOTCH
     uint16_t dterm_soft_notch_hz;           // Dterm Notch frequency
     uint16_t dterm_soft_notch_cutoff;       // Dterm Notch Cutoff frequency
-#endif USE_GYRO_NOTCH_2
+#endif
+#ifdef USE_GYRO_NOTCH_2
     uint16_t gyro_soft_notch_hz_2;          // Gyro Notch 2 frequency
     uint16_t gyro_soft_notch_cutoff_2;      // Gyro Notch 2 Cutoff frequency
 #endif
