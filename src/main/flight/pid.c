@@ -111,6 +111,7 @@ void pidInit(void)
     }
 }
 
+#ifdef USE_DTERM_NOTCH
 bool pidDeltaNotchInit(const pidProfile_t *pidProfile, uint32_t refreshRate)
 {
 	if(refreshRate){
@@ -119,6 +120,7 @@ bool pidDeltaNotchInit(const pidProfile_t *pidProfile, uint32_t refreshRate)
 	}
 	return false;
 }
+#endif
 
 void pidResetErrorAccumulators(void)
 {
