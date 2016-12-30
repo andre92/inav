@@ -497,6 +497,14 @@ void init(void)
 
     flashLedsAndBeep();
 
+#ifdef USE_DTERM_NOTCH
+    #ifdef ASYNC_GYRO_PROCESSING
+        pidDeltaNotchInit(&currentProfile->pidProfile, getPidUpdateRate());
+    #else
+        pidDeltaNotchInit(&currentProfile->pidProfile, gyro.targetLooptime);
+    #endif
+#endif
+    
     imuInit();
 
     mspFcInit();
