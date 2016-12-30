@@ -364,7 +364,7 @@ static void pidApplyRateController(const pidProfile_t *pidProfile, pidState_t *p
         }
 
 #ifdef USE_DTERM_NOTCH
-        if (pidProfile->dterm_notch_hz) {
+        if (pidProfile->dterm_soft_notch_hz) {
             newDTerm = biquadFilterApply(&pidState->deltaNotchFilter, newDTerm);
         }
 #endif
