@@ -28,6 +28,8 @@
 #include "common/filter.h"
 #include "common/maths.h"
 
+#include "config/config.h"
+
 #include "fc/rc_controls.h"
 #include "fc/runtime_config.h"
 
@@ -72,6 +74,11 @@ typedef struct {
     rateLimitFilter_t axisAccelFilter;
     pt1Filter_t ptermLpfState;
     pt1Filter_t deltaLpfState;
+    
+    // Dterm notch filtering
+#ifdef USE_DTERM_NOTCH
+    biquadFilter_t deltaNotchFilter;
+#endif
 } pidState_t;
 
 extern uint8_t motorCount;
@@ -100,6 +107,13 @@ void pidInit(void)
     static const float dtermCoeffs[PID_GYRO_RATE_BUF_LENGTH] = {5.0f/8, 2.0f/8, -8.0f/8, -2.0f/8, 3.0f/8};
     for (int axis = 0; axis < 3; ++ axis) {
         firFilterInit(&pidState[axis].gyroRateFilter, pidState[axis].gyroRateBuf, PID_GYRO_RATE_BUF_LENGTH, dtermCoeffs);
+#ifdef USE_DTERM_NOTCH
+    #ifdef ASYNC_GYRO_PROCESSING
+        biquadFilterInitNotch(&pidState[axis].deltaNotchFilter, getPidUpdateRate(), currentProfile->pidProfile.dterm_soft_notch_hz, currentProfile->pidProfile.dterm_soft_notch_cutoff);
+    #else
+        biquadFilterInitNotch(&pidState[axis].deltaNotchFilter, gyro.targetLooptime, currentProfile->pidProfile.dterm_soft_notch_hz, currentProfile->pidProfile.dterm_soft_notch_cutoff);
+    #endif
+#endif
     }
 }
 
@@ -348,6 +362,12 @@ static void pidApplyRateController(const pidProfile_t *pidProfile, pidState_t *p
             newDTerm = pt1FilterApply4(&pidState->deltaLpfState, newDTerm, pidProfile->dterm_lpf_hz, dT);
         }
 
+#ifdef USE_DTERM_NOTCH
+        if (pidProfile->dterm_notch_hz) {
+            newDTerm = biquadFilterApply(&pidState->deltaNotchFilter, newDTerm);
+        }
+#endif
+        
         // Additionally constrain D
         newDTerm = constrainf(newDTerm, -300.0f, 300.0f);
     }
