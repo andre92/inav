@@ -48,9 +48,13 @@ typedef struct gyroConfig_s {
     uint8_t gyroSyncDenominator;            // Gyro sync Denominator
     uint8_t gyro_lpf;                       // gyro LPF setting - values are driver specific, in case of invalid number, a reasonable default ~30-40HZ is chosen.
     uint8_t gyro_soft_lpf_hz;
-#ifdef USE_GYRO_NOTCH_FILTER
-    uint16_t gyro_soft_notch_hz;
-    uint16_t gyro_soft_notch_cutoff_hz;
+#ifdef USE_GYRO_NOTCH_1
+    uint16_t gyro_soft_notch_hz_1;
+    uint16_t gyro_soft_notch_cutoff_1;
+#endif
+#ifdef USE_GYRO_NOTCH_2
+    uint16_t gyro_soft_notch_hz_2;
+    uint16_t gyro_soft_notch_cutoff_2;
 #endif
 } gyroConfig_t;
 
