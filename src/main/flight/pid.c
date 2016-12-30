@@ -29,6 +29,7 @@
 #include "common/maths.h"
 
 #include "config/config.h"
+#include "config/config_master.h"
 
 #include "fc/rc_controls.h"
 #include "fc/runtime_config.h"
