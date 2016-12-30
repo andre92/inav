@@ -142,12 +142,12 @@ void resetPidProfile(pidProfile_t *pidProfile)
     pidProfile->gyro_soft_notch_hz_1 = 172;
 #endif
 #ifdef USE_DTERM_NOTCH
-    pidProfile->dterm_soft_notch_cutoff_1 = 43;
-    pidProfile->dterm_soft_notch_hz_1 = 86;
+    pidProfile->dterm_soft_notch_cutoff = 43;
+    pidProfile->dterm_soft_notch_hz = 86;
 #endif
 #ifdef USE_GYRO_NOTCH_2
-    pidProfile->gyro_soft_notch_cutoff_1 = 43;
-    pidProfile->gyro_soft_notch_hz_1 = 86;
+    pidProfile->gyro_soft_notch_cutoff_2 = 43;
+    pidProfile->gyro_soft_notch_hz_2 = 86;
 #endif
     pidProfile->dterm_lpf_hz = 40;
     pidProfile->yaw_lpf_hz = 30;
