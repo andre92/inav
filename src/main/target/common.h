@@ -30,7 +30,6 @@
 #define USE_SERIALRX_IBUS       // Cheap FlySky & Turnigy receivers
 
 #if (FLASH_SIZE > 64)
-#define USE_GYRO_NOTCH_1
 #define ASYNC_GYRO_PROCESSING
 #define BOOTLOG
 #define BLACKBOX
@@ -45,6 +44,7 @@
 #endif
 
 #if (FLASH_SIZE > 128)
+#define USE_GYRO_NOTCH_1
 #define USE_GYRO_NOTCH_2
 #define USE_DTERM_NOTCH
 #define CMS
