@@ -1475,6 +1475,7 @@ static mspResult_e mspFcProcessInCommand(uint8_t cmdMSP, sbuf_t *src)
 #ifdef USE_DTERM_NOTCH
         currentProfile->pidProfile.dterm_soft_notch_hz = constrain(sbufReadU16(src), 0, 500);
         currentProfile->pidProfile.dterm_soft_notch_cutoff = constrain(sbufReadU16(src), 1, 500);
+        pidDeltaNotchInit(&currentProfile->pidProfile);
 #endif
 #ifdef USE_GYRO_NOTCH_2
         currentProfile->pidProfile.gyro_soft_notch_hz_2 = constrain(sbufReadU16(src), 0, 500);
