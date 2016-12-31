@@ -26,6 +26,13 @@
 #define BIQUAD_BANDWIDTH 1.9f     /* bandwidth in octaves */
 #define BIQUAD_Q 1.0f / sqrtf(2.0f)     /* quality factor - butterworth*/
 
+// NULL filter
+
+float nullFilterApply(void *filter, float input)
+{
+    return input;
+}
+
 // PT1 Low Pass filter
 
 // f_cut = cutoff frequency
