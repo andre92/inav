@@ -82,6 +82,10 @@ typedef struct {
 #endif
 } pidState_t;
 
+#ifdef USE_DTERM_NOTCH
+    static filterApplyFnPtr notchFilterApplyFn;
+#endif
+
 extern uint8_t motorCount;
 extern bool motorLimitReached;
 extern float dT;
@@ -112,13 +116,23 @@ void pidInit(void)
 }
 
 #ifdef USE_DTERM_NOTCH
-bool pidDeltaNotchInit(const pidProfile_t *pidProfile, uint32_t refreshRate)
+bool pidDeltaNotchInit(const pidProfile_t *pidProfile)
 {
-	if(refreshRate){
-        biquadFilterInitNotch(&pidState->deltaNotchFilter, refreshRate, pidProfile->dterm_soft_notch_hz, pidProfile->dterm_soft_notch_cutoff);
+    uint32_t refreshRate;
+    #ifdef ASYNC_GYRO_PROCESSING
+        refreshRate =  getPidUpdateRate();
+    #else
+        refreshRate= gyro.targetLooptime;
+    #endif
+    notchFilterApplyFn = nullFilterApply;
+    if(refreshRate != 0 && pidProfile->dterm_soft_notch_hz != 0){
+        notchFilterApplyFn = (filterApplyFnPtr)biquadFilterApply;
+        for (int axis = 0; axis < 3; ++ axis) {
+            biquadFilterInitNotch(&pidState[axis].deltaNotchFilter, refreshRate, pidProfile->dterm_soft_notch_hz, pidProfile->dterm_soft_notch_cutoff);
+        }
         return true;
-	}
-	return false;
+    }
+    return false;
 }
 #endif
 
@@ -368,9 +382,7 @@ static void pidApplyRateController(const pidProfile_t *pidProfile, pidState_t *p
         }
 
 #ifdef USE_DTERM_NOTCH
-        if (pidProfile->dterm_soft_notch_hz) {
-            newDTerm = biquadFilterApply(&pidState->deltaNotchFilter, newDTerm);
-        }
+        newDTerm = notchFilterApplyFn(&pidState->deltaNotchFilter, newDTerm);
 #endif
         
         // Additionally constrain D
