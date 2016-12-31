@@ -338,41 +338,32 @@ void gyroUpdate(void)
     if (!gyro.dev.read(&gyro.dev)) {
         return;
     }
+    float gyroADCf[XYZ_AXIS_COUNT];
 
     // Prepare a copy of int32_t gyroADC for mangling to prevent overflow
     gyro.gyroADC[X] = gyro.dev.gyroADCRaw[X];
     gyro.gyroADC[Y] = gyro.dev.gyroADCRaw[Y];
     gyro.gyroADC[Z] = gyro.dev.gyroADCRaw[Z];
 
-    if (gyroConfig->gyro_soft_lpf_hz) {
-        for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++) {
-            gyro.gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterLPF[axis], (float)gyro.gyroADC[axis]));
-        }
-    }
-
-#ifdef USE_GYRO_NOTCH_1
-    if (gyroConfig->gyro_soft_notch_hz_1){
-        for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++){
-            gyro.gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterNotch1[axis], (float) gyro.gyroADC[axis]));
-        }	
-    }
-#endif
-
-#ifdef USE_GYRO_NOTCH_2
-    if (gyroConfig->gyro_soft_notch_hz_2){
-        for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++){
-            gyro.gyroADC[axis] = lrintf(biquadFilterApply(&gyroFilterNotch2[axis], (float) gyro.gyroADC[axis]));
-        }	
-    }
-#endif
-	
     if (!isGyroCalibrationComplete()) {
         performAcclerationCalibration(gyroConfig->gyroMovementCalibrationThreshold);
     }
 
-    gyro.gyroADC[X] -= gyroZero[X];
-    gyro.gyroADC[Y] -= gyroZero[Y];
-    gyro.gyroADC[Z] -= gyroZero[Z];
+    for (int axis = 0; axis < XYZ_AXIS_COUNT; axis++) {
+        gyro.gyroADC[axis] -= gyroZero[axis];
+        
+        gyroADCf[axis] = (float)gyro.gyroADC[axis];
+        
+        gyroADCf[axis] = softLpfFilterApplyFn(softLpfFilter[axis], gyroADCf[axis]);
+#ifdef USE_GYRO_NOTCH_1
+        gyroADCf[axis] = notchFilter1ApplyFn(notchFilter1[axis], gyroADCf[axis]);
+#endif
+
+#ifdef USE_GYRO_NOTCH_2
+        gyroADCf[axis] = notchFilter2ApplyFn(notchFilter2[axis], gyroADCf[axis]);
+#endif
+        gyro.gyroADC[axis] = lrintf(gyroADCf[axis]);
+    }    
 
     alignSensors(gyro.gyroADC, gyro.dev.gyroAlign);
 }
