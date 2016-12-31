@@ -116,7 +116,7 @@ void pidInit(void)
 }
 
 #ifdef USE_DTERM_NOTCH
-bool pidDeltaNotchInit(const pidProfile_t *pidProfile)
+bool pidInitFilters(const pidProfile_t *pidProfile)
 {
     uint32_t refreshRate;
     #ifdef ASYNC_GYRO_PROCESSING
