@@ -60,7 +60,7 @@
 #define MSP_PROTOCOL_VERSION                0
 
 #define API_VERSION_MAJOR                   1 // increment when major changes are made
-#define API_VERSION_MINOR                   22 // increment when any change is made, reset to zero when major changes are released after changing API_VERSION_MAJOR
+#define API_VERSION_MINOR                   23 // increment when any change is made, reset to zero when major changes are released after changing API_VERSION_MAJOR
 
 #define API_VERSION_LENGTH                  2
 
@@ -223,6 +223,8 @@
 #define MSP_OSD_VIDEO_CONFIG            180
 #define MSP_SET_OSD_VIDEO_CONFIG        181
 
+#define MSP_DISPLAYPORT                 182
+
 //
 // Multwii original MSP commands
 //
@@ -291,6 +293,7 @@
 
 // Additional commands that are not compatible with MultiWii
 #define MSP_STATUS_EX            150    //out message         cycletime, errors_count, CPU load, sensor present etc
+#define MSP_SENSOR_STATUS        151    //out message         Hardware sensor status
 #define MSP_UID                  160    //out message         Unique device ID
 #define MSP_GPSSVINFO            164    //out message         get Signal Strength (only U-Blox)
 #define MSP_GPSSTATISTICS        166    //out message         get GPS debugging data

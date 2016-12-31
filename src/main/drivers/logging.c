@@ -21,14 +21,13 @@
 
 #include "platform.h"
 
-#include "build/build_config.h"
+#include "common/utils.h"
+
 #include "logging.h"
 
 #ifdef BOOTLOG
 
 #include "system.h"
-
-#define MAX_BOOTLOG_ENTRIES     64
 
 static bootLogEntry_t   events[MAX_BOOTLOG_ENTRIES];
 static int              eventCount;
