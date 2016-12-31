@@ -223,13 +223,16 @@ bool gyroInit(const gyroConfig_t *gyroConfigToUse)
     gyro.dev.init(&gyro.dev);
 	
     static biquadFilter_t gyroFilterLPF[XYZ_AXIS_COUNT];
-    static biquadFilter_t gyroFilterNotch_1[XYZ_AXIS_COUNT];
-    static biquadFilter_t gyroFilterNotch_2[XYZ_AXIS_COUNT];
-    
     softLpfFilterApplyFn = nullFilterApply;
+#ifdef USE_GYRO_NOTCH_1
+    static biquadFilter_t gyroFilterNotch_1[XYZ_AXIS_COUNT];
     notchFilter1ApplyFn = nullFilterApply;
+#endif
+#ifdef USE_GYRO_NOTCH_2
+    static biquadFilter_t gyroFilterNotch_2[XYZ_AXIS_COUNT];
     notchFilter2ApplyFn = nullFilterApply;
-    
+#endif
+	
     if (gyroConfig->gyro_soft_lpf_hz) {
         softLpfFilterApplyFn = (filterApplyFnPtr)biquadFilterApply;
         for (int axis = 0; axis < 3; axis++) {
