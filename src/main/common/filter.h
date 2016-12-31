@@ -51,6 +51,10 @@ typedef struct firFilter_s {
     uint8_t coeffsLength;
 } firFilter_t;
 
+typedef float (*filterApplyFnPtr)(void *filter, float input);
+
+float nullFilterApply(void *filter, float input);
+
 float pt1FilterApply(pt1Filter_t *filter, float input);
 float pt1FilterApply4(pt1Filter_t *filter, float input, uint16_t f_cut, float dt);
 void pt1FilterReset(pt1Filter_t *filter, float input);
