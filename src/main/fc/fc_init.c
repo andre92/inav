@@ -498,7 +498,7 @@ void init(void)
     flashLedsAndBeep();
 
 #ifdef USE_DTERM_NOTCH
-    pidDeltaNotchInit(&currentProfile->pidProfile);
+    pidInitFilters(&currentProfile->pidProfile);
 #endif
     
     imuInit();
