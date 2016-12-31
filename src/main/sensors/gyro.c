@@ -69,6 +69,7 @@ static uint16_t calibratingG = 0;
 static filterApplyFnPtr softLpfFilterApplyFn;
 static void *softLpfFilter[XYZ_AXIS_COUNT];
 
+
 #ifdef USE_GYRO_NOTCH_1
 static filterApplyFnPtr notchFilter1ApplyFn;
 static void *notchFilter1[XYZ_AXIS_COUNT];
@@ -80,6 +81,7 @@ static void *notchFilter2[XYZ_AXIS_COUNT];
 
 static const extiConfig_t *selectMPUIntExtiConfig(void)
 {
+
 #if defined(MPU_INT_EXTI)
     static const extiConfig_t mpuIntExtiConfig = { .tag = IO_TAG(MPU_INT_EXTI) };
     return &mpuIntExtiConfig;
@@ -273,7 +275,6 @@ bool gyroInit(const gyroConfig_t *gyroConfigToUse)
     }
 #endif
     return true;
-
 }
 
 void gyroSetCalibrationCycles(uint16_t calibrationCyclesRequired)
