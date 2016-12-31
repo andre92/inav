@@ -22,6 +22,7 @@
 
 #include "common/filter.h"
 #include "common/maths.h"
+#include "common/utils.h"
 
 #define BIQUAD_BANDWIDTH 1.9f     /* bandwidth in octaves */
 #define BIQUAD_Q 1.0f / sqrtf(2.0f)     /* quality factor - butterworth*/
@@ -30,6 +31,7 @@
 
 float nullFilterApply(void *filter, float input)
 {
+    UNUSED(filter);
     return input;
 }
 
