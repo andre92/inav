@@ -847,6 +847,21 @@ void activateConfig(void)
 
 void validateAndFixConfig(void)
 {
+#ifdef USE_GYRO_NOTCH_1
+    if (currentProfile->pidProfile.gyro_soft_notch_hz_1 >= currentProfile->pidProfile.gyro_soft_notch_cutoff_1) {
+        currentProfile->pidProfile.gyro_soft_notch_hz_1 = 0;
+    }
+#endif
+#ifdef USE_DTERM_NOTCH
+    if (currentProfile->pidProfile.dterm_soft_notch_hz >= currentProfile->pidProfile.dterm_soft_notch_cutoff) {
+        currentProfile->pidProfile.dterm_soft_notch_hz = 0;
+    }
+#endif
+#ifdef USE_GYRO_NOTCH_2
+    if (currentProfile->pidProfile.gyro_soft_notch_hz_2 >= currentProfile->pidProfile.gyro_soft_notch_cutoff_2) {
+        currentProfile->pidProfile.gyro_soft_notch_hz_2 = 0;
+    }
+#endif
     // Disable unused features
     featureClear(FEATURE_UNUSED_1 | FEATURE_UNUSED_2);
 
